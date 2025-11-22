@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawyerHub - Find Top-Rated Legal Professionals</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-bg: #ecf0f1;
+            --dark-text: #2c3e50;
+            --light-text: #ecf0f1;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            outline: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--light-text);
+            border: 1px solid var(--light-text);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)),
+                        url('/api/placeholder/1200/600') center/cover no-repeat;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .search-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: -4rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+        }
+        
+        .search-group {
+            position: relative;
+        }
+        
+        .search-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #95a5a6;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .featured-categories {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .category-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--light-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: var(--secondary-color);
+        }
+        
+        .category-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .category-card p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .top-lawyers {
+            padding: 4rem 0;
+            background-color: var(--light-bg);
+        }
+        
+        .lawyers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .lawyer-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .lawyer-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .lawyer-img {
+            height: 200px;
+            background: url('/api/placeholder/400/320') center/cover no-repeat;
+        }
+        
+        .lawyer-info {
+            padding: 1.5rem;
+        }
+        
+        .lawyer-name {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .lawyer-specialty {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .lawyer-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stars {
+            color: var(--warning-color);
+            margin-right: 0.5rem;
+        }
+        
+        .lawyer-location {
+            display: flex;
+            align-items: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .lawyer-location i {
+            margin-right: 0.5rem;
+        }
+        
+        .reward-badge {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+        
+        .premium-badge {
+            background-color: var(--success-color);
+        }
+        
+        .testimonials {
+            padding: 4rem 0;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(52, 152, 219, 0.1);
+            font-family: Georgia, serif;
+        }
+        
+        .testimonial-text {
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: url('/api/placeholder/80/80') center/cover no-repeat;
+            margin-right: 1rem;
+        }
+        
+        .author-info h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.2rem;
+        }
+        
+        .reward-system {
+            padding: 4rem 0;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+        }
+        
+        .reward-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .reward-image {
+            height: 400px;
+            background: url('/api/placeholder/600/400') center/cover no-repeat;
+            border-radius: 8px;
+        }
+        
+        .reward-info h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .reward-info h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+        
+        .reward-info p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .reward-points {
+            margin-top: 2rem;
+        }
+        
+        .reward-point {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .reward-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+        
+        footer {
+            background-color: #1a252f;
+            color: var(--light-text);
+            padding: 4rem 0 0;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--secondary-color);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .footer-contact p {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+        
+        .footer-contact i {
+            margin-right: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .social-link:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #95a5a6;
+        }
+        .lawyer-badges {
+            display: block;
+            margin-bottom: 1.5rem;
+            }
+
+        .lawyer-info .btn {
+            margin-top: 1.5rem !important;
+            display: block;
+            clear: both;
+            }
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .reward-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Font Awesome CDN */
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-balance-scale"></i> LawyerHub
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Find Lawyers</a></li>
+                        <li><a href="#">Categories</a></li>
+                        <li><a href="#">Reward System</a></li>
+                        <li><a href="#about-us">About Us</a></li>
+                        <li><a href="#con">Contact</a></li>
+                    </ul>
+                    <button class="mobile-menu-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </nav>
+                <div class="auth-buttons">
+                    <a href="#" class="btn btn-outline">Login</a>
+                    <a href="#" class="btn btn-primary">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Find Your Perfect Legal Partner</h1>
+                <p>Connect with top-rated lawyers across various legal specialties. Our reward system ensures you find the best legal professionals.</p>
+                <a href="#" class="btn btn-primary">Find a Lawyer Now</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="search-container">
+            <form class="search-form">
+                <div class="search-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="search-input" placeholder="Search by name, specialty...">
+                </div>
+                <div class="search-group">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" class="search-input" placeholder="Location">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <section class="featured-categories">
+        <div class="container">
+            <div class="section-title">
+                <h2>Popular Legal Categories</h2>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Real Estate Law</h3>
+                    <p>Find lawyers specialized in property transactions, disputes, and regulations.</p>
+                    <a href="#" class="btn btn-primary">Explore</a>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>Corporate Law</h3>
+                    <p>Legal professionals for business formation, contracts, and compliance.</p>
+                    <a href="#" class="btn btn-primary">Explore</a>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <h3>Criminal Law</h3>
+                    <p>Attorneys specializing in criminal defense and prosecution.</p>
+                    <a href="#" class="btn btn-primary">Explore</a>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Family Law</h3>
+                    <p>Experts in divorce, child custody, and family-related legal matters.</p>
+                    <a href="#" class="btn btn-primary">Explore</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="top-lawyers">
+        <div class="container">
+            <div class="section-title">
+                <h2>Top-Rated Lawyers</h2>
+            </div>
+            <div class="lawyers-grid">
+                <div class="lawyer-card">
+                    <div class="lawyer-img"></div>
+                    <div class="lawyer-info">
+                        <h3 class="lawyer-name">Jennifer Morrison</h3>
+                        <p class="lawyer-specialty">Corporate Law</p>
+                        <div class="lawyer-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span>4.5 (128 reviews)</span>
+                        </div>
+                        <p class="lawyer-location">
+                            <i class="fas fa-map-marker-alt"></i> New York, NY
+                        </p>
+                        <div class="lawyer-badges">
+                            <span class="reward-badge premium-badge">Premium</span>
+                            <span class="reward-badge">Top Performer</span>
+                        </div>
+                        <a href="#" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">View Profile</a>
+                    </div>
+                </div>
+                <div class="lawyer-card">
+                    <div class="lawyer-img"></div>
+                    <div class="lawyer-info">
+                        <h3 class="lawyer-name">Michael Reynolds</h3>
+                        <p class="lawyer-specialty">Real Estate Law</p>
+                        <div class="lawyer-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <span>4.0 (87 reviews)</span>
+                        </div>
+                        <p class="lawyer-location">
+                            <i class="fas fa-map-marker-alt"></i> Los Angeles, CA
+                        </p>
+                        <div class="lawyer-badges">
+                            <span class="reward-badge">Highly Rated</span>
+                        </div>
+                        <a href="#" class="btn btn-primary" style="width: 100%; margin-top: 2.5rem;">View Profile</a>
+                    </div>
+                </div>
+                <div class="lawyer-card">
+                    <div class="lawyer-img"></div>
+                    <div class="lawyer-info">
+                        <h3 class="lawyer-name">Sarah Johnson</h3>
+                        <p class="lawyer-specialty">Family Law</p>
+                        <div class="lawyer-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span>5.0 (156 reviews)</span>
+                        </div>
+                        <p class="lawyer-location">
+                            <i class="fas fa-map-marker-alt"></i> Chicago, IL
+                        </p>
+                        <div class="lawyer-badges">
+                            <span class="reward-badge premium-badge">Premium</span>
+                            <span class="reward-badge">Top Performer</span>
+                        </div>
+                        <a href="#" class="btn btn-primary" style="width: 100%; margin-top: 2.5rem;">View Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="reward-system">
+        <div class="container">
+            <div class="reward-content">
+                <div class="reward-image"></div>
+                <div class="reward-info">
+                    <h2>Our Reward System</h2>
+                    <p>At LawyerHub, we believe in recognizing excellence. Our comprehensive reward system ensures that the best lawyers are highlighted based on client satisfaction and performance.</p>
+                    <p>Lawyers earn badges and premium status through consistent high ratings, client reviews, and successful case completions.</p>
+                    <div class="reward-points">
+                        <div class="reward-point">
+                            <div class="reward-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div>
+                                <h4>Rating-Based Recognition</h4>
+                                <p>Lawyers with consistently high ratings get highlighted in search results.</p>
+                            </div>
+                        </div>
+                        <div class="reward-point">
+                            <div class="reward-icon">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div>
+                                <h4>Achievement Badges</h4>
+                                <p>Special badges showcase expertise and client satisfaction levels.</p>
+                            </div>
+                        </div>
+                        <div class="reward-point">
+                            <div class="reward-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div>
+                                <h4>Premium Status</h4>
+                                <p>Top performers earn premium status with enhanced visibility.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>What Our Users Say</h2>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">LawyerHub made finding a corporate attorney so much easier. The reward system helped me identify the best lawyers quickly. I was represented excellently in my business merger case.</p>
+                    <div class="testimonial-author">
+                        <div class="author-img"></div>
+                        <div class="author-info">
+                            <h4>David Chen</h4>
+                            <p>Entrepreneur</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">The rating system on LawyerHub is trustworthy and accurate. I found a fantastic real estate lawyer who helped me navigate a complex property dispute. Highly recommend!</p>
+                    <div class="testimonial-author">
+                        <div class="author-img"></div>
+                        <div class="author-info">
+                            <h4>Lisa Tompkins</h4>
+                            <p>Homeowner</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">As a lawyer on LawyerHub, the reward system motivates me to provide the best service possible. It's great to be recognized for hard work and client satisfaction.</p>
+                    <div class="testimonial-author">
+                        <div class="author-img"></div>
+                        <div class="author-info">
+                            <h4>Mark Williams</h4>
+                            <p>Family Law Attorney</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>About LawyerHub</h3>
+                    <p>LawyerHub connects clients with top-rated legal professionals across various specialties. Our reward system ensures quality and client satisfaction.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Find Lawyers</a></li>
+                        <li><a href="#">Legal Categories</a></li>
+                        <li><a href="#">Reward System</a></li>
+                        <li><a href="#">Join as a Lawyer</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal Categories</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Corporate Law</a></li>
+                        <li><a href="#">Family Law</a></li>
+                        <li><a href="#">Criminal Defense</a></li>
+                        <li><a href="#">Real Estate Law</a></li>
+                        <li><a href="#">Immigration Law</a></li>
+                        <li><a href="#">View All Categories</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column footer-contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 1234 Legal Avenue, Suite 500<br>New York, NY 10001</p>
+                    <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@lawyerhub.com</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 LawyerHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navMenu = document.querySelector('nav ul');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

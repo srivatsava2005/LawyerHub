@@ -1,0 +1,223 @@
+{
+    "collections": {
+      "users": {
+        "fields": {
+          "_id": "ObjectId (auto-generated)",
+          "email": "String (unique)",
+          "password": "String (hashed)",
+          "name": "String",
+          "role": "String (enum: client, lawyer, admin)",
+          "created_at": "Date",
+          "updated_at": "Date",
+          
+          "bookmarks": ["ObjectId (lawyer references)"],
+          "recent_searches": ["String"],
+          
+          "specialty": ["String"],
+          "location": {
+            "address": "String",
+            "city": "String",
+            "state": "String",
+            "country": "String",
+            "zip": "String",
+            "coordinates": {
+              "latitude": "Number",
+              "longitude": "Number"
+            }
+          },
+          "bio": "String",
+          "education": [{
+            "institution": "String",
+            "degree": "String",
+            "field": "String",
+            "year": "Number"
+          }],
+          "experience": [{
+            "position": "String",
+            "company": "String",
+            "duration": "String",
+            "description": "String"
+          }],
+          "license_info": {
+            "license_number": "String",
+            "jurisdiction": "String",
+            "year_admitted": "Number",
+            "status": "String"
+          },
+          "profile_image": "String (url)",
+          "contact_info": {
+            "phone": "String",
+            "email": "String",
+            "website": "String",
+            "social_media": {
+              "linkedin": "String",
+              "twitter": "String"
+            }
+          },
+          "profile_complete": "Boolean",
+          "is_verified": "Boolean",
+          
+          "rating": "Number (1-5 scale, average of reviews)",
+          "review_count": "Number",
+          "badges": ["String"],
+          "reward_points": "Number",
+          "reward_tier": "String (enum: standard, silver, gold, platinum)",
+          "featured_until": "Date (premium placement expiration)",
+          
+          "availability": [{
+            "day": "String",
+            "slots": [{
+              "start_time": "String",
+              "end_time": "String",
+              "is_booked": "Boolean"
+            }]
+          }]
+        },
+        "indexes": [
+          { "fields": { "email": 1 }, "options": { "unique": true } },
+          { "fields": { "role": 1 } },
+          { "fields": { "specialty": 1 } },
+          { "fields": { "location.city": 1 } },
+          { "fields": { "rating": -1 } },
+          { "fields": { "reward_tier": 1 } },
+          { "fields": { "reward_points": -1 } }
+        ]
+      },
+      
+      "reviews": {
+        "fields": {
+          "_id": "ObjectId (auto-generated)",
+          "user_id": "String (ObjectId reference)",
+          "lawyer_id": "String (ObjectId reference)",
+          "rating": "Number (1-5)",
+          "comment": "String",
+          "created_at": "Date",
+          "helpfulness_votes": "Number",
+          "verified_client": "Boolean"
+        },
+        "indexes": [
+          { "fields": { "lawyer_id": 1 } },
+          { "fields": { "user_id": 1, "lawyer_id": 1 }, "options": { "unique": true } },
+          { "fields": { "created_at": -1 } }
+        ]
+      },
+      
+      "categories": {
+        "fields": {
+          "_id": "ObjectId (auto-generated)",
+          "name": "String",
+          "icon": "String",
+          "description": "String",
+          "created_at": "Date",
+          "parent_category": "ObjectId (self-reference)"
+        },
+        "indexes": [
+          { "fields": { "name": 1 }, "options": { "unique": true } }
+        ]
+      },
+      
+      "consultations": {
+        "fields": {
+          "_id": "ObjectId (auto-generated)",
+          "client_id": "String (ObjectId reference)",
+          "lawyer_id": "String (ObjectId reference)",
+          "status": "String (enum: requested, accepted, declined, completed, cancelled)",
+          "date": "Date",
+          "time_slot": {
+            "start": "String",
+            "end": "String"
+          },
+          "consultation_type": "String (enum: in-person, video, phone)",
+          "topic": "String",
+          "description": "String",
+          "notes": "String",
+          "created_at": "Date",
+          "updated_at": "Date"
+        },
+        "indexes": [
+          { "fields": { "client_id": 1 } },
+          { "fields": { "lawyer_id": 1 } },
+          { "fields": { "date": 1 } },
+          { "fields": { "status": 1 } }
+        ]
+      },
+      
+      "messages": {
+        "fields": {
+          "_id": "ObjectId (auto-generated)",
+          "conversation_id": "String", 
+          "sender_id": "String (ObjectId reference)",
+          "receiver_id": "String (ObjectId reference)",
+          "content": "String",
+          "created_at": "Date",
+          "read": "Boolean",
+          "attachments": [{
+            "name": "String",
+            "url": "String",
+            "type": "String"
+          }]
+        },
+        "indexes": [
+          { "fields": { "conversation_id": 1 } },
+          { "fields": { "sender_id": 1 } },
+          { "fields": { "receiver_id": 1 } },
+          { "fields": { "created_at": -1 } }
+        ]
+      },
+      
+      "conversations": {
+        "fields": {
+          "_id": "ObjectId (auto-generated)",
+          "participants": ["String (ObjectId references)"],
+          "last_message": {
+            "content": "String",
+            "sender_id": "String (ObjectId reference)",
+            "timestamp": "Date"
+          },
+          "created_at": "Date",
+          "updated_at": "Date",
+          "related_consultation": "ObjectId (reference)"
+        },
+        "indexes": [
+          { "fields": { "participants": 1 } },
+          { "fields": { "updated_at": -1 } }
+        ]
+      },
+      
+      "reward_history": {
+        "fields": {
+          "_id": "ObjectId (auto-generated)",
+          "lawyer_id": "String (ObjectId reference)",
+          "event_type": "String (enum: new_review, tier_change, badge_earned)",
+          "description": "String",
+          "points_change": "Number",
+          "previous_tier": "String",
+          "new_tier": "String",
+          "badge_earned": "String",
+          "created_at": "Date"
+        },
+        "indexes": [
+          { "fields": { "lawyer_id": 1 } },
+          { "fields": { "created_at": -1 } }
+        ]
+      },
+      
+      "featured_listings": {
+        "fields": {
+          "_id": "ObjectId (auto-generated)",
+          "lawyer_id": "String (ObjectId reference)",
+          "package_type": "String (enum: basic, premium, platinum)",
+          "start_date": "Date",
+          "end_date": "Date",
+          "position": "Number",
+          "is_active": "Boolean",
+          "created_at": "Date"
+        },
+        "indexes": [
+          { "fields": { "lawyer_id": 1 } },
+          { "fields": { "end_date": 1 } },
+          { "fields": { "is_active": 1 } }
+        ]
+      }
+    }
+  }

@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawyerHub - Lawyer Reward Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-bg: #ecf0f1;
+            --dark-text: #2c3e50;
+            --light-text: #ecf0f1;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --gold-color: #f1c40f;
+            --silver-color: #bdc3c7;
+            --bronze-color: #cd7f32;
+            --platinum-color: #e5e4e2;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            outline: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .dashboard-header {
+            padding: 2rem 0;
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .profile-summary {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--platinum-color);
+        }
+        
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .profile-info .specialty {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stat-item .icon {
+            color: var(--secondary-color);
+        }
+        
+        .tier-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: white;
+            font-weight: 600;
+            margin-right: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .tier-platinum {
+            background-color: var(--platinum-color);
+            color: #555;
+        }
+        
+        .tier-gold {
+            background-color: var(--gold-color);
+            color: #7d6608;
+        }
+        
+        .tier-silver {
+            background-color: var(--silver-color);
+            color: #444;
+        }
+        
+        .tier-standard {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .card-title i {
+            color: var(--secondary-color);
+        }
+        
+        .progress-circle {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+            transform-origin: center;
+        }
+        
+        .progress-ring-circle {
+            stroke-dasharray: 283;
+            transition: stroke-dashoffset 0.5s;
+            stroke: var(--secondary-color);
+            stroke-width: 10;
+            fill: transparent;
+        }
+        
+        .progress-ring-bg {
+            stroke: #eee;
+            stroke-width: 10;
+            fill: transparent;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .progress-text .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .progress-text .label {
+            font-size: 0.9rem;
+            color: #95a5a6;
+        }
+        
+        .tier-progress {
+            text-align: center;
+        }
+        
+        .tier-progress-bar {
+            height: 4px;
+            background-color: #eee;
+            border-radius: 2px;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .tier-progress-fill {
+            height: 100%;
+            background-color: var(--secondary-color);
+            border-radius: 2px;
+            position: relative;
+        }
+        
+        .tier-marker {
+            position: absolute;
+            top: -8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            border: 3px solid #ddd;
+            transform: translateX(-50%);
+        }
+        
+        .tier-marker.active {
+            border-color: var(--secondary-color);
+        }
+        
+        .tier-marker.current {
+            border-color: var(--success-color);
+            background-color: var(--success-color);
+        }
+        
+        .tier-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding: 0 10px;
+        }
+        
+        .tier-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            font-weight: 500;
+            width: 25%;
+            text-align: center;
+        }
+        
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .badge-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .badge-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .badge-icon i {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+        }
+        
+        .badge-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+        
+        .badge-description {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        
+        .recent-activity {
+            grid-column: 1 / -1;
+        }
+        
+        .activity-item {
+            padding: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .activity-icon.review {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+        }
+        
+        .activity-icon.badge {
+            background-color: rgba(241, 196, 15, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .activity-icon.tier {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--accent-color);
+        }
+        
+        .activity-info {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .activity-description {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: #95a5a6;
+        }
+        
+        .reward-benefits {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .benefit-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .benefit-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+        }
+        
+        .benefit-info h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .benefit-info p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .profile-summary {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .stats {
+                justify-content: center;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-balance-scale"></i> LawyerHub
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="#">Reviews</a></li>
+                        <li><a href="#">Messages</a></li>
+                        <li><a href="#">Consultations</a></li>
+                    </ul>
+                    <button class="mobile-menu-btn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </nav>
+                <div class="user-menu">
+                    <a href="#" class="btn btn-outline">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="dashboard-header">
+        <div class="container">
+            <div class="profile-summary">
+                <div class="profile-image">
+                    <img src="/api/placeholder/150/150" alt="Lawyer profile image">
+                </div>
+                <div class="profile-info">
+                    <h1>Sarah Johnson</h1>
+                    <p class="specialty">Family Law</p>
+                    <div>
+                        <span class="tier-badge tier-platinum">
+                            <i class="fas fa-crown"></i> Platinum
+                        </span>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div>
+                                <strong>4.8</strong> Rating
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div>
+                                <strong>156</strong> Reviews
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div>
+                                <strong>720</strong> Points
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="dashboard-content">
+            <div class="main-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-line"></i> Reward Progress
+                        </h3>
+                    </div>
+                    <div class="progress-circle">
+                        <svg class="progress-ring" width="180" height="180">
+                            <circle class="progress-ring-bg" cx="90" cy="90" r="80"></circle>
+                            <circle class="progress-ring-circle" cx="90" cy="90" r="80" stroke-dashoffset="30"></circle>
+                        </svg>
+                        <div class="progress-text">
+                            <div class="value">720</div>
+                            <div class="label">reward points</div>
+                        </div>
+                    </div>
+                    <div class="tier-progress">
+                        <div class="tier-progress-bar">
+                            <div class="tier-progress-fill" style="width: 90%;"></div>
+                            <div class="tier-marker active" style="left: 0%"></div>
+                            <div class="tier-marker active" style="left: 33%"></div>
+                            <div class="tier-marker active" style="left: 66%"></div>
+                            <div class="tier-marker current" style="left: 90%"></div>
+                        </div>
+                        <div class="tier-labels">
+                            <div class="tier-label">Standard</div>
+                            <div class="tier-label">Silver</div>
+                            <div class="tier-label">Gold</div>
+                            <div class="tier-label">Platinum</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <a href="#" class="btn btn-outline">View Reward Details</a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-award"></i> Earned Badges
+                        </h3>
+                    </div>
+                    <div class="badges-grid">
+                        <div class="badge-item">
+                            <div class="badge-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <h4 class="badge-name">Top Rated</h4>
+                            <p class="badge-description">Consistently high ratings from clients</p>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h4 class="badge-name">Client Favorite</h4>
+                            <p class="badge-description">High satisfaction from 20+ clients</p>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4 class="badge-name">Experienced Pro</h4>
+                            <p class="badge-description">Served 30+ clients successfully</p>
+                        </div>
+                        <div class="badge-item">
+                            <div class="badge-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h4 class="badge-name">Perfect Score</h4>
+                            <p class="badge-description">Multiple 5-star reviews</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card recent-activity">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-history"></i> Recent Activity
+                        </h3>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon review">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h4 class="activity-title">New 5-star Review</h4>
+                                <p class="activity-description">You received a new 5-star review from John D.</p>
+                            </div>
+                            <div class="activity-time">
+                                2 days ago
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon badge">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h4 class="activity-title">Badge Earned</h4>
+                                <p class="activity-description">You earned the 'Client Favorite' badge!</p>
+                            </div>
+                            <div class="activity-time">
+                                1 week ago
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon tier">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h4 class="activity-title">Tier Upgrade</h4>
+                                <p class="activity-description">Congratulations! You've been promoted to Platinum tier.</p>
+                            </div>
+                            <div class="activity-time">
+                                2 weeks ago
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon review">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="activity-info">
+                                <h4 class="activity-title">New 4-star Review</h4>
+                                <p class="activity-description">You received a new 4-star review from Emily T.</p>
+                            </div>
+                            <div class="activity-time">
+                                3 weeks ago
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-gem"></i> Tier Benefits
+                        </h3>
+                    </div>
+                    <div class="reward-benefits">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <div class="benefit-info">
+                                <h4>Enhanced Visibility</h4>
+                                <p>Priority placement in search results for potential clients</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="benefit-info">
+                                <h4>Platinum Badge</h4>
+                                <p>Exclusive badge displayed on your profile</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="benefit-info">
+                                <h4>Reduced Platform Fee</h4>
+                                <p>Only 10% platform fee (Standard: 20%)</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-ad"></i>
+                            </div>
+                            <div class="benefit-info">
+                                <h4>Featured Listing</h4>
+                                <p>Your profile is featured in the homepage rotation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-lightbulb"></i> Tips to Improve
+                        </h3>
+                    </div>
+                    <ul style="padding-left: 1.5rem;">
+                        <li style="margin-bottom: 1rem;">
+                            <strong>Respond quickly</strong> to client inquiries to improve engagement metrics
+                        </li>
+                        <li style="margin-bottom: 1rem;">
+                            <strong>Ask satisfied clients</strong> to leave reviews after successful cases
+                        </li>
+                        <li style="margin-bottom: 1rem;">
+                            <strong>Complete your profile</strong> with detailed expertise and case results
+                        </li>
+                        <li>
+                            <strong>Share knowledge</strong> through LawyerHub's Q&A forum to build authority
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set circle progress based on reward points
+        document.addEventListener('DOMContentLoaded', function() {
+            // Progress circle animation
+            const circle = document.querySelector('.progress-ring-circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = 2 * Math.PI * radius;
+            
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            
+            // Calculate progress (720 points out of 800 maximum for Platinum)
+            const progress = 720 / 800;
+            const offset = circumference - progress * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navMenu = document.querySelector('nav ul');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+                });
+            }
+            
+            // Format dates to relative time
+            const activityTimes = document.querySelectorAll('.activity-time');
+            activityTimes.forEach(timeElement => {
+                const timeText = timeElement.textContent.trim();
+                // This would be replaced with actual date formatting logic
+                // For demo purposes, we're using the static text already in the HTML
+            });
+        });
+    </script>
+</body>
+</html>
